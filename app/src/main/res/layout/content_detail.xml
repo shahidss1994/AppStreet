@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="childViewModel"
+            type="com.example.appstreetshahid.ui.home.viewmodel.GitHubViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:paddingStart="16dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="16dp"
+        tools:context=".ui.detail.DetailActivity"
+        tools:showIn="@layout/activity_detail">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_user_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:transitionName="userImage"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardCornerRadius="90dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/user_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:mutableBitmap="@{childViewModel.getImageBitmap()}"
+                app:srcCompat="@drawable/ic_user_placeholder" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textColor="#000000"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:transitionName="name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cv_user_image"
+            app:mutableText="@{childViewModel.getName()}" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:textColor="#000000"
+            android:textSize="13sp"
+            android:transitionName="userName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            app:mutableText="@{childViewModel.getUsername()}" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/user_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/user_name"
+            app:mutableText="@{childViewModel.getUrl()}" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_work"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/user_url"
+            app:srcCompat="@drawable/ic_work" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/repo_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_work"
+            app:mutableText="@{childViewModel.getReponame()}" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/repo_name"
+            app:mutableText="@{childViewModel.getDescription()}" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/repo_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/description"
+            app:mutableText="@{childViewModel.getRepoUrl()}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
