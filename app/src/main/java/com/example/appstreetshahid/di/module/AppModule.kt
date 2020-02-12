@@ -63,23 +63,24 @@ class AppModule(val application: AppStreetShahid) {
     @Named("RESTFUL")
     fun provideOkhttpClientRestful(@Named("RESTFUL") cache: Cache): OkHttpClient {
         val timeout = 30
-        val builder = OkHttpClient.Builder()
-        builder.readTimeout(timeout.toLong(), TimeUnit.SECONDS)
+        return OkHttpClient.Builder()
+                .readTimeout(timeout.toLong(), TimeUnit.SECONDS)
                 .writeTimeout(timeout.toLong(), TimeUnit.SECONDS)
                 .connectTimeout(timeout.toLong(), TimeUnit.SECONDS)
-        builder.cache(cache)
-        builder.addInterceptor(object : Interceptor {
-            @Throws(IOException::class)
-            override fun intercept(chain: Interceptor.Chain): Response {
-                var request: Request = chain.request()
-                request = request.newBuilder().addHeader("content-type", "application/json").build()
-                Log.d(TAG, "Request -> $request")
-                val response = chain.proceed(request)
-                Log.d(TAG, "Response -> $response")
-                return response
-            }
-        })
-        return builder.build()
+                .cache(cache)
+                .addInterceptor(object : Interceptor {
+                    @Throws(IOException::class)
+                    override fun intercept(chain: Interceptor.Chain): Response {
+                        var request: Request = chain.request()
+                        request = request.newBuilder()
+                                .addHeader("content-type", "application/json")
+                                .addHeader("Cache-Control", "public, max-age=60").build()
+                        Log.d(TAG, "Request -> $request")
+                        val response = chain.proceed(request)
+                        Log.d(TAG, "Response -> $response")
+                        return response
+                    }
+                }).build()
     }
 
     @Provides
@@ -98,7 +99,6 @@ class AppModule(val application: AppStreetShahid) {
     fun provideImageCache(): ImageCache {
         val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
         val cacheSize = maxMemory / 8
-
         val lruCache = object : LruCache<String, Bitmap>(cacheSize) {
             override fun sizeOf(key: String, value: Bitmap): Int {
                 val bitmapByteCount = value.rowBytes * value.height
