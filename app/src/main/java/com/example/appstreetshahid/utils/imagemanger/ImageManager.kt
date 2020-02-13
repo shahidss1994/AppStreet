@@ -1,31 +1,44 @@
 package com.example.appstreetshahid.utils.imagemanger
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.appcompat.widget.AppCompatImageView
 
 class ImageManager(private val imageCache: ImageCache) {
 
-    private val imageUrlList: HashMap<Int, DownloadImageTask> = HashMap()
-
+    private val imageUrlList: HashMap<String, DownloadImageTask> = HashMap()
+    private val imageViewHashMap: HashMap<Int, String> = HashMap()
 
     fun loadImage(imageUrl: String,
                   imageView: AppCompatImageView?,
                   imageLoadingCallBack: ImageLoadingCallBack) {
-        if (!imageUrlList.containsKey(imageView.hashCode())) {
+        imageViewHashMap[imageView?.hashCode() ?: 0] = imageUrl
+        if (!imageUrlList.containsKey(imageUrl)) {
             val bitmap = imageCache.getImage(imageUrl)
             if (bitmap == null) {
-                val downloadImageTask = DownloadImageTask(imageUrl, imageView, object : ImageLoadingCallBack {
-                    override fun onSuccess(bitmap: Bitmap) {
-                        imageCache.addImage(imageUrl, bitmap)
-                        imageLoadingCallBack.onSuccess(bitmap)
-                    }
+                Log.d("Download Initiated", "hashcode " + imageView?.hashCode())
+                Log.d("Download Initiated", "imageUrl " + imageUrl)
+                if (!imageUrlList.containsKey(imageUrl)) {
+                    val downloadImageTask = DownloadImageTask(imageUrl, object : ImageLoadingCallBack {
+                        override fun onSuccess(bitmap: Bitmap) {
+                            imageCache.addImage(imageUrl, bitmap)
+                            val exactImageUrl = imageViewHashMap[imageView?.hashCode() ?: 0]
+                            Log.d("Download Done", "hashcode " + imageView?.hashCode())
+                            Log.d("Download Done", "imageUrl " + imageUrl)
+                            Log.d("Download Done", "exactImageUrl " + exactImageUrl)
+                            if (exactImageUrl?.equals(imageUrl) == true) {
+                                imageView?.setImageBitmap(bitmap)
+                            }
+                            imageLoadingCallBack.onSuccess(bitmap)
+                        }
 
-                    override fun onFail() {
-                        imageLoadingCallBack.onFail()
-                    }
+                        override fun onFail() {
+                            imageLoadingCallBack.onFail()
+                        }
 
-                })
-                downloadImageTask.execute()
+                    })
+                    downloadImageTask.execute()
+                }
             } else {
                 imageView?.setImageBitmap(bitmap)
                 imageLoadingCallBack.onSuccess(bitmap)
@@ -33,9 +46,8 @@ class ImageManager(private val imageCache: ImageCache) {
         }
     }
 
-    fun clearView(imageView: AppCompatImageView?) {
-        if (imageView != null) {
-            imageUrlList[imageView.hashCode()]?.imageView = null
+    fun clearView(url: String?) {
+        if (url != null) {
         }
     }
 

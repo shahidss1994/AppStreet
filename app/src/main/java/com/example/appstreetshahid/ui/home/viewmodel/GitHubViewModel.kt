@@ -3,12 +3,10 @@ package com.example.appstreetshahid.ui.home.viewmodel
 import android.app.Activity
 import android.graphics.Bitmap
 import android.text.TextUtils
-import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.lifecycle.MutableLiveData
 import com.example.appstreetshahid.di.BaseViewModel
 import com.example.appstreetshahid.ui.home.model.GithubTrending
-import com.example.appstreetshahid.utils.imagemanger.DownloadImageTask
 import com.example.appstreetshahid.utils.imagemanger.ImageCache
 import com.example.appstreetshahid.utils.imagemanger.ImageLoadingCallBack
 import com.example.appstreetshahid.utils.imagemanger.ImageManager
@@ -17,7 +15,7 @@ import javax.inject.Inject
 class GitHubViewModel(activity: Activity) : BaseViewModel(activity) {
 
     @Inject
-    lateinit var imageManager: ImageManager
+    lateinit var imageCache: ImageCache
 
     private val name = MutableLiveData<String>()
     private val username = MutableLiveData<String>()
@@ -26,6 +24,7 @@ class GitHubViewModel(activity: Activity) : BaseViewModel(activity) {
     private val imageBitmap = MutableLiveData<Bitmap>()
     private val reponame = MutableLiveData<String>()
     private val repoUrl = MutableLiveData<String>()
+    private var imageManager: ImageManager? = null
 
     fun bind(githubTrending: GithubTrending) {
         name.value = githubTrending.name
@@ -66,7 +65,8 @@ class GitHubViewModel(activity: Activity) : BaseViewModel(activity) {
 
     fun loadImage(url: String?, imageView: AppCompatImageView?, imageLoadingCallBack: ImageLoadingCallBack) {
         if (url != null && !TextUtils.isEmpty(url) && imageView != null) {
-            imageManager.loadImage(url, imageView, object : ImageLoadingCallBack {
+            imageManager = ImageManager(imageCache)
+            imageManager?.loadImage(url, imageView, object : ImageLoadingCallBack {
                 override fun onSuccess(bitmap: Bitmap) {
                     imageLoadingCallBack.onSuccess(bitmap)
                 }
@@ -79,8 +79,9 @@ class GitHubViewModel(activity: Activity) : BaseViewModel(activity) {
         }
     }
 
-    fun unBind(imageView: AppCompatImageView?) {
-        imageManager.clearView(imageView)
+    fun unBind(url: String?) {
+        imageManager?.clearView(url)
+        imageManager = null
     }
 
 }

@@ -3,13 +3,13 @@ package com.example.appstreetshahid.utils.imagemanger
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
+import android.util.Log
 import androidx.appcompat.widget.AppCompatImageView
 import java.net.HttpURLConnection
 import java.net.URL
 
 
 class DownloadImageTask(private val imageUrl: String,
-                        var imageView: AppCompatImageView? = null,
                         private val imageLoadingCallBack: ImageLoadingCallBack) : AsyncTask<Void, Void, Bitmap>() {
 
     private var inSampleSize = 0
@@ -37,6 +37,7 @@ class DownloadImageTask(private val imageUrl: String,
             }
 
         } catch (e: Exception) {
+            e.printStackTrace()
             null
         }
     }
@@ -44,8 +45,6 @@ class DownloadImageTask(private val imageUrl: String,
     override fun onPostExecute(result: Bitmap?) {
         super.onPostExecute(result)
         if (result != null) {
-            imageView?.setImageBitmap(result)
-            imageView?.setImageBitmap(result)
             imageLoadingCallBack.onSuccess(result)
         } else {
             imageLoadingCallBack.onFail()

@@ -33,7 +33,7 @@ class GitHubAdapter(val activity: Activity,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(githubTrendingList[position])
+        holder.bind(githubTrendingList[holder.adapterPosition])
     }
 
     override fun getItemCount(): Int {
@@ -47,7 +47,7 @@ class GitHubAdapter(val activity: Activity,
 
     override fun onViewRecycled(holder: ViewHolder) {
         super.onViewRecycled(holder)
-        holder.unBind()
+        holder.unBind(githubTrendingList[holder.adapterPosition])
     }
 
     inner class ViewHolder(private val binding: ItemGithubBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -108,8 +108,8 @@ class GitHubAdapter(val activity: Activity,
             }*/
         }
 
-        fun unBind() {
-            viewModel.unBind(binding.userImage)
+        fun unBind(githubTrending: GithubTrending) {
+            viewModel.unBind(githubTrending.avatar)
         }
 
     }

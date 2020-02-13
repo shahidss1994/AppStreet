@@ -109,7 +109,6 @@ class AppModule(val application: AppStreetShahid) {
     }
 
     @Provides
-    @Singleton
     fun provideImageManager(imageCache: ImageCache): ImageManager {
         return ImageManager(imageCache)
     }
