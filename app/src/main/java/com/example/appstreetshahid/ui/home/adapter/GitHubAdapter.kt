@@ -65,20 +65,28 @@ class GitHubAdapter(val activity: Activity,
 
             })
             binding.cardView.setOnClickListener {
-                val intent = Intent(activity, DetailActivity::class.java)
-                intent.putExtra(GithubTrending.TAG, githubTrending)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (binding.cardView.isEnabled) {
+                    binding.cardView.isEnabled = false
+                    val intent = Intent(activity, DetailActivity::class.java)
+                    intent.putExtra(GithubTrending.TAG, githubTrending)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-                    val activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
-                            UtilPair.create(binding.cvUserImage as View, ViewCompat.getTransitionName(binding.cvUserImage)),
-                            UtilPair.create(binding.name as View, ViewCompat.getTransitionName(binding.name)),
-                            UtilPair.create(binding.userName as View, ViewCompat.getTransitionName(binding.userName)))
-                    ActivityCompat.startActivity(activity, intent, activityOptionsCompat.toBundle())
+                        val activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
+                                UtilPair.create(binding.cvUserImage as View, ViewCompat.getTransitionName(binding.cvUserImage)),
+                                UtilPair.create(binding.name as View, ViewCompat.getTransitionName(binding.name)),
+                                UtilPair.create(binding.userName as View, ViewCompat.getTransitionName(binding.userName)))
+                        ActivityCompat.startActivity(activity, intent, activityOptionsCompat.toBundle())
 
-                } else {
-                    ActivityCompat.startActivity(activity, intent, null)
+                    } else {
+                        ActivityCompat.startActivity(activity, intent, null)
+                    }
+                    onClickItem.value = githubTrending
+                    binding.cardView.apply {
+                        postDelayed({
+                            isEnabled = true
+                        }, 500)
+                    }
                 }
-                onClickItem.value = githubTrending
             }
         }
 
