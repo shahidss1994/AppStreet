@@ -79,9 +79,8 @@ class GitHubViewModel(activity: Activity) : BaseViewModel(activity) {
         }
     }
 
-    fun unBind(url: String?) {
-        imageManager?.clearView(url)
-        imageManager = null
+    fun unBind() {
+        imageManager?.clearView()
     }
 
 }

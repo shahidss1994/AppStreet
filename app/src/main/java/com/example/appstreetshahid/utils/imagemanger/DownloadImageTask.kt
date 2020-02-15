@@ -3,8 +3,6 @@ package com.example.appstreetshahid.utils.imagemanger
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
-import android.util.Log
-import androidx.appcompat.widget.AppCompatImageView
 import java.net.HttpURLConnection
 import java.net.URL
 

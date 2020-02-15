@@ -47,7 +47,7 @@ class GitHubAdapter(val activity: Activity,
 
     override fun onViewRecycled(holder: ViewHolder) {
         super.onViewRecycled(holder)
-        holder.unBind(githubTrendingList[holder.adapterPosition])
+        holder.unBind()
     }
 
     inner class ViewHolder(private val binding: ItemGithubBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -70,9 +70,9 @@ class GitHubAdapter(val activity: Activity,
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
                     val activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
-                                UtilPair.create(binding.cvUserImage as View, ViewCompat.getTransitionName(binding.cvUserImage)),
-                                UtilPair.create(binding.name as View, ViewCompat.getTransitionName(binding.name)),
-                                UtilPair.create(binding.userName as View, ViewCompat.getTransitionName(binding.userName)))
+                            UtilPair.create(binding.cvUserImage as View, ViewCompat.getTransitionName(binding.cvUserImage)),
+                            UtilPair.create(binding.name as View, ViewCompat.getTransitionName(binding.name)),
+                            UtilPair.create(binding.userName as View, ViewCompat.getTransitionName(binding.userName)))
                     ActivityCompat.startActivity(activity, intent, activityOptionsCompat.toBundle())
 
                 } else {
@@ -80,36 +80,10 @@ class GitHubAdapter(val activity: Activity,
                 }
                 onClickItem.value = githubTrending
             }
-            /*if (!TextUtils.isEmpty(githubTrending.avatar)) {
-                val bitmap = imageCache.getImage(githubTrending.avatar ?: "")
-                if (bitmap == null) {
-                    if (!downLoadList.containsKey(position)) {
-                        val downloadImageTask = DownloadImageTask(githubTrending.avatar ?: "",
-                                binding.userImage, imageCache, object : ImageLoadingCallBack {
-                            override fun onSuccess(bitmap: Bitmap) {
-                                viewModel.getImageBitmap().value = bitmap
-                            }
-
-                            override fun onFail() {
-
-                            }
-
-                        })
-                        downLoadList[position] = downloadImageTask
-                        downloadImageTask.execute()
-                    } else {
-                        downLoadList[position]?.setImage = true
-                    }
-                } else {
-                    if (downLoadList[position]?.isLoading != true) {
-                        binding.userImage.setImageBitmap(bitmap)
-                    }
-                }
-            }*/
         }
 
-        fun unBind(githubTrending: GithubTrending) {
-            viewModel.unBind(githubTrending.avatar)
+        fun unBind() {
+            viewModel.unBind()
         }
 
     }
@@ -122,19 +96,6 @@ class GitHubAdapter(val activity: Activity,
             outRect.right = marginRight
             outRect.top = marginTop
             outRect.bottom = marginBottom
-            /*when {
-                parent.getChildAdapterPosition(view) == 0 -> {
-                    outRect.bottom = marginBottom
-                }
-                parent.getChildAdapterPosition(view) == (parent.adapter?.itemCount
-                        ?: 0) - 1 -> {
-                    outRect.top = marginTop
-                }
-                else -> {
-                    outRect.top = marginTop
-                    outRect.bottom = marginBottom
-                }
-            }*/
         }
 
     }

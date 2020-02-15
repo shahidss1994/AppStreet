@@ -48,24 +48,20 @@ class HomeViewModel(activity: Activity) : BaseViewModel(activity) {
                 )
     }
 
-    private fun onRetrievePostListStart() {
+    fun onRetrievePostListStart() {
         loadingVisibility.value = View.VISIBLE
         errorMessage.value = null
     }
 
-    private fun onRetrievePostListFinish() {
+    fun onRetrievePostListFinish() {
         loadingVisibility.value = View.GONE
     }
 
-    private fun onRetrievePostListSuccess(list: List<GithubTrending>) {
+    fun onRetrievePostListSuccess(list: List<GithubTrending>) {
         postListAdapter.updatePostList(list)
     }
 
-    private fun onRetrievePostListError(error: Throwable) {
-        Log.d(
-                "HomeViewModel",
-                "api call fail => ${error.message ?: error.localizedMessage ?: "error not found"}"
-        )
+    fun onRetrievePostListError(error: Throwable) {
         errorMessage.value = R.string.loading_error
     }
 
