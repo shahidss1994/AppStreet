@@ -67,8 +67,8 @@ class GitHubViewModel(activity: Activity) : BaseViewModel(activity) {
         if (url != null && !TextUtils.isEmpty(url) && imageView != null) {
             imageManager = ImageManager(imageCache)
             imageManager?.loadImage(url, imageView, object : ImageLoadingCallBack {
-                override fun onSuccess(bitmap: Bitmap) {
-                    imageLoadingCallBack.onSuccess(bitmap)
+                override fun onSuccess(bitmap: Bitmap,url:String) {
+                    imageLoadingCallBack.onSuccess(bitmap,url)
                 }
 
                 override fun onFail() {
@@ -77,11 +77,6 @@ class GitHubViewModel(activity: Activity) : BaseViewModel(activity) {
 
             })
         }
-    }
-
-    fun unBind() {
-        imageManager?.clearView()
-        imageManager = null
     }
 
 }

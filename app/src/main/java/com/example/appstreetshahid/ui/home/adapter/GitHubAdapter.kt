@@ -45,11 +45,6 @@ class GitHubAdapter(val activity: Activity,
         notifyDataSetChanged()
     }
 
-    override fun onViewRecycled(holder: ViewHolder) {
-        super.onViewRecycled(holder)
-        holder.unBind()
-    }
-
     inner class ViewHolder(private val binding: ItemGithubBinding) : RecyclerView.ViewHolder(binding.root) {
         val viewModel = GitHubViewModel(activity)
 
@@ -59,7 +54,7 @@ class GitHubAdapter(val activity: Activity,
             viewModel.bind(githubTrending)
             binding.viewModel = viewModel
             viewModel.loadImage(githubTrending.avatar, binding.userImage, object : ImageLoadingCallBack {
-                override fun onSuccess(bitmap: Bitmap) {}
+                override fun onSuccess(bitmap: Bitmap,url:String) {}
 
                 override fun onFail() {}
 
@@ -88,10 +83,6 @@ class GitHubAdapter(val activity: Activity,
                     }
                 }
             }
-        }
-
-        fun unBind() {
-            viewModel.unBind()
         }
 
     }

@@ -41,7 +41,7 @@ class DetailActivity : AppCompatActivity() {
         binding.viewModel = viewModel
         viewModel.bind(githubTrending)
         viewModel.loadImage(githubTrending.avatar, binding.childContentDetail.userImage, object : ImageLoadingCallBack {
-            override fun onSuccess(bitmap: Bitmap) {}
+            override fun onSuccess(bitmap: Bitmap,url: String) {}
             override fun onFail() {}
         })
         binding.childContentDetail.userUrl.paintFlags = binding.childContentDetail.userUrl.paintFlags or Paint.UNDERLINE_TEXT_FLAG

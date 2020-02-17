@@ -43,7 +43,7 @@ class DownloadImageTask(private val imageUrl: String,
     override fun onPostExecute(result: Bitmap?) {
         super.onPostExecute(result)
         if (result != null) {
-            imageLoadingCallBack.onSuccess(result)
+            imageLoadingCallBack.onSuccess(result,imageUrl)
         } else {
             imageLoadingCallBack.onFail()
         }

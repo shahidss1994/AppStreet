@@ -5,41 +5,42 @@ import androidx.appcompat.widget.AppCompatImageView
 
 class ImageManager(private val imageCache: ImageCache) {
 
-    private var imageView: AppCompatImageView? = null
-
     fun loadImage(imageUrl: String,
                   imageView: AppCompatImageView?,
                   imageLoadingCallBack: ImageLoadingCallBack) {
-        this.imageView = imageView
+        ImageManagerList.hashCodeUrlMap[(imageView?.hashCode() ?: 0)] = imageUrl
         val bitmap = imageCache.getImage(imageUrl)
         if (bitmap == null) {
-            if (!ImageManagerList.imageUrlList.containsKey(imageUrl)) {
+            if (!ImageManagerList.urlDownloadMap.containsKey(imageUrl)) {
                 val downloadImageTask = DownloadImageTask(imageUrl, object : ImageLoadingCallBack {
-                    override fun onSuccess(bitmap: Bitmap) {
+                    override fun onSuccess(bitmap: Bitmap, url: String) {
                         imageCache.addImage(imageUrl, bitmap)
-                        this@ImageManager.imageView?.setImageBitmap(bitmap)
-                        imageLoadingCallBack.onSuccess(bitmap)
-                        ImageManagerList.imageUrlList.remove(imageUrl)
+                        if (ImageManagerList.hashCodeUrlMap[(imageView?.hashCode()
+                                        ?: 0)]?.equals(imageUrl) == true) {
+                            imageView?.apply {
+                                post { setImageBitmap(bitmap) }
+                            }
+                        }
+                        imageLoadingCallBack.onSuccess(bitmap, url)
+                        ImageManagerList.urlDownloadMap.remove(imageUrl)
                     }
 
                     override fun onFail() {
                         imageLoadingCallBack.onFail()
-                        ImageManagerList.imageUrlList.remove(imageUrl)
+                        ImageManagerList.urlDownloadMap.remove(imageUrl)
                     }
 
                 })
-                ImageManagerList.imageUrlList[imageUrl] = downloadImageTask
+                ImageManagerList.urlDownloadMap[imageUrl] = downloadImageTask
                 downloadImageTask.execute()
             }
         } else {
-            ImageManagerList.imageUrlList.remove(imageUrl)
-            this@ImageManager.imageView?.setImageBitmap(bitmap)
-            imageLoadingCallBack.onSuccess(bitmap)
+            ImageManagerList.urlDownloadMap.remove(imageUrl)
+            imageView?.apply {
+                post { setImageBitmap(bitmap) }
+            }
+            imageLoadingCallBack.onSuccess(bitmap, imageUrl)
         }
-    }
-
-    fun clearView() {
-        imageView = null
     }
 
 }
